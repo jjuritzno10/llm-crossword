@@ -21,6 +21,11 @@ class Clue(BaseModel):
     answer: Optional[str] = None
     answered: bool = False
 
+    def __hash__(self) -> int:
+        """Generate a hash based on unique clue attributes."""
+        return hash((self.number, self.direction, self.row, self.col))
+
+
     def cells(self) -> List[Tuple[int, int]]:
         """Return list of (row, col) coordinates for this clue"""
         cells = []
