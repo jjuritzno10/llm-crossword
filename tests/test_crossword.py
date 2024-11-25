@@ -140,7 +140,27 @@ class TestCrosswordPuzzle:
             puzzle.get_current_clue_chars(invalid_clue)
 
     def test_undo(self, puzzle):
-        raise NotImplementedError
+        
+        # Make some moves
+        puzzle.set_clue_chars(puzzle.clues[0], list("CAT"))
+        puzzle.set_clue_chars(puzzle.clues[1], list("COW"))
+
+        # Verify initial state
+        assert len(puzzle.grid_history) == 3
+        assert len(puzzle.clue_history) == 2
+        assert puzzle.clues[0].answered is True
+        assert puzzle.clues[1].answered is True
+
+        # Reset and verify
+        puzzle.undo()
+        assert len(puzzle.grid_history) == 2
+        assert len(puzzle.clue_history) == 1
+        assert puzzle.clues[0].answered is True
+        
+        current_grid = puzzle.current_grid
+        assert current_grid.cells[0][0].value == "C"  # First cell of CAT/COW
+        assert current_grid.cells[0][1].value == "A"  # Second cell of CAT
+        assert current_grid.cells[0][2].value == "T"  # Third cell of CAT
 
     def test_reset(self, puzzle):
         # Make some moves
